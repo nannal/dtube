@@ -1,5 +1,13 @@
 refreshUploadStatus = null
 
+const D_SNAP = process.env.PORT || "localhost"
+const D_SNAP_PORT = process.env.PORT || 5000
+const D_SNAP_HTTP = process.env.PORT || "http"
+
+const D_UPLDR = process.env.PORT || "localhost"
+const D_UPLDR_PORT = process.env.PORT || 5000
+const D_UPLDR_HTTP = process.env.PORT || "http"
+
 Template.upload.rendered = function () {
   Session.set('uploadToken', null)
   Session.set('uploadVideoProgress', null)
@@ -80,21 +88,20 @@ Template.upload.setBestUploadEndpoint = function (cb) {
 }
 
 var getUploaderStatus = function (upldr) {
-  var url = (Session.get('remoteSettings').localhost == true)
-    ? 'http://localhost:5000/getStatus'
-    : 'https://'+upldr+'.d.tube/getStatus'
+  var url = D_UPLDR_HTTP+'://'+D_UPLDR+':'D_UPLDR_PORT'/getStatus'
   return new Promise(function (resolve, reject) {
     var req = new XMLHttpRequest();
     req.open('get', url, true);
     req.overrideMimeType("application/json");
     req.onload = function () {
       var status = req.status;
-      if (status == 200) {
-        var jsonResult = JSON.parse(req.responseText)
-        jsonResult.upldr = upldr
-        resolve(jsonResult);
-      } else {
-        reject(upldr);
+      while (status != 200) {
+      req.open('get', url, true);
+      req.overrideMimeType("application/json");
+      var status = req.status;
+      var jsonResult = JSON.parse(req.responseText)
+      jsonResult.upldr = upldr
+      resolve(jsonResult);
       }
     };
     req.send();
@@ -127,9 +134,7 @@ Template.upload.genBodyLivestream = function (author, permlink, title, snaphash,
 }
 
 Template.upload.uploadVideo = function (file, progressid, cb) {
-  var postUrl = (Session.get('remoteSettings').localhost == true)
-    ? 'http://localhost:5000/uploadVideo?videoEncodingFormats=240p,480p,720p,1080p&sprite=true'
-    : 'https://'+Session.get('upldr')+'.d.tube/uploadVideo?videoEncodingFormats=240p,480p,720p,1080p&sprite=true'
+  var postUrl = D_UPLDR_HTTP+'://'+D_UPLDR+':'D_UPLDR_PORT'/uploadVideo?videoEncodingFormats=240p,480p,720p,1080p&sprite=true'
   var formData = new FormData();
   formData.append('files', file);
   $(progressid).progress({ value: 0, total: 1 })
@@ -182,9 +187,7 @@ Template.upload.uploadImage = function (file, progressid, cb) {
   $('#uploadSnap > i').removeClass('cloud upload red')
   $('#uploadSnap > i').addClass('asterisk loading')
   $('#uploadSnap > i').css('background', 'transparent')
-  var postUrl = (Session.get('remoteSettings').localhost == true)
-    ? 'http://localhost:5000/uploadImage'
-    : 'https://snap1.d.tube/uploadImage'
+  var postUrl = D_SNAP_HTTP+'://'+D_SNAP+':'D_SNAP_PORT'/uploadImage'
   var formData = new FormData();
   formData.append('files', file);
   $(progressid).progress({ value: 0, total: 1 })
@@ -214,7 +217,7 @@ Template.upload.uploadImage = function (file, progressid, cb) {
       $(progressid).hide()
 
       refreshUploadSnapStatus = setInterval(function () {
-        var url = 'https://snap1.d.tube/getProgressByToken/' + result.token
+        var url = D_UPLDR_HTTP+'://'+D_UPLDR+':'D_UPLDR_PORT'/getProgressByToken/' + result.token
         $.getJSON(url, function (data) {
           var isCompleteUpload = true
           if (data.ipfsAddSource.progress !== "100.00%") {

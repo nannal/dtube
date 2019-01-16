@@ -1,3 +1,7 @@
+const D_UPLDR = process.env.PORT || "localhost"
+const D_UPLDR_PORT = process.env.PORT || 5000
+const D_UPLDR_HTTP = process.env.PORT || "http"
+
 Template.uploadvideoprogress.helpers({
     progress: function() {
       return Session.get('uploadVideoProgress')
@@ -9,10 +13,8 @@ Template.uploadvideoprogress.rendered = function() {
 }
 Template.uploadvideoprogress.update = function() {
   var token = Session.get('uploadToken')
-  var url = (Session.get('remoteSettings').localhost == true)
-    ? 'http://localhost:5000/getProgressByToken/'+token
-    : 'https://'+Session.get('upldr')+'.d.tube/getProgressByToken/'+token
-  var credentials = Session.get('upldr') == 'cluster' ? true : false
+  var url = D_UPLDR_HTTP+'://'+D_UPLDR+':'D_UPLDR_PORT+'/getProgressByToken/'+token
+  var credentials true
   $.ajax({
     cache: false,
     contentType: false,
@@ -27,7 +29,7 @@ Template.uploadvideoprogress.update = function() {
       Session.set('uploadVideoProgress', data)
 
       // if upload is finished, we stop updating the progress
-      
+
       var isCompleteUpload = true
       if (typeof data.finished === 'boolean' && data.finished === false) {
         isCompleteUpload = false
@@ -46,13 +48,13 @@ Template.uploadvideoprogress.update = function() {
           isCompleteUpload = false;
         }
       }
-  
+
       if (isCompleteUpload) {
         clearInterval(refreshUploadStatus)
-  
+
         if (data.ipfsAddSourceVideo)
           $('input[name="videohash"]').val(data.ipfsAddSourceVideo.hash)
-  
+
         if (data.encodedVideos) {
           for (let i = 0; i < data.encodedVideos.length; i++) {
             switch(data.encodedVideos[i].ipfsAddEncodeVideo.encodeSize || data.encodedVideos[i].encode.encodeSize) {
@@ -71,11 +73,11 @@ Template.uploadvideoprogress.update = function() {
             }
           }
         }
-        
-  
+
+
         if (data.sprite)
           $('input[name="spritehash"]').val(data.sprite.ipfsAddSprite.hash)
-  
+
         Session.set('uploadVideoProgress', null)
         $('#step1load').parent().addClass('completed')
       }
