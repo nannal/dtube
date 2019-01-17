@@ -1,5 +1,11 @@
-FROM jshimko/meteor-launchpad:latest
+FROM debian:stretch
+
 LABEL "project.home"="https://github.com/nannal/dtube"
+RUN apt-get update
+RUN apt-get install curl git build-essential procps python -y
+RUN curl https://install.meteor.com/ | sh
+RUN meteor update --patch
+
 RUN git clone -b Dockify git://github.com/nannal/dtube
 WORKDIR /dtube
 RUN meteor npm install
