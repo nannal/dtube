@@ -17,4 +17,4 @@ ENV D_SUBS 'http://localhost'
 ENV D_SUBS_PORT '5000'
 ENV D_SUBS_HTTP '1'
 ENV PORT '3000'
-CMD ["meteor", "--production"]
+CMD ["meteor", "--production", "--allow-superuser"]
