@@ -88,7 +88,7 @@ Template.upload.setBestUploadEndpoint = function (cb) {
 }
 
 var getUploaderStatus = function (upldr) {
-  var url = D_UPLDR_HTTP+'://'+D_UPLDR+':'D_UPLDR_PORT'/getStatus'
+  var url = D_UPLDR_HTTP+'://'+D_UPLDR+':'+D_UPLDR_PORT+'/getStatus'
   return new Promise(function (resolve, reject) {
     var req = new XMLHttpRequest();
     req.open('get', url, true);
@@ -134,7 +134,7 @@ Template.upload.genBodyLivestream = function (author, permlink, title, snaphash,
 }
 
 Template.upload.uploadVideo = function (file, progressid, cb) {
-  var postUrl = D_UPLDR_HTTP+'://'+D_UPLDR+':'D_UPLDR_PORT'/uploadVideo?videoEncodingFormats=240p,480p,720p,1080p&sprite=true'
+  var postUrl = D_UPLDR_HTTP+'://'+D_UPLDR+':'+D_UPLDR_PORT+'/uploadVideo?videoEncodingFormats=240p,480p,720p,1080p&sprite=true'
   var formData = new FormData();
   formData.append('files', file);
   $(progressid).progress({ value: 0, total: 1 })
@@ -187,7 +187,7 @@ Template.upload.uploadImage = function (file, progressid, cb) {
   $('#uploadSnap > i').removeClass('cloud upload red')
   $('#uploadSnap > i').addClass('asterisk loading')
   $('#uploadSnap > i').css('background', 'transparent')
-  var postUrl = D_SNAP_HTTP+'://'+D_SNAP+':'D_SNAP_PORT'/uploadImage'
+  var postUrl = D_SNAP_HTTP+'://'+D_SNAP+':'+D_SNAP_PORT+'/uploadImage'
   var formData = new FormData();
   formData.append('files', file);
   $(progressid).progress({ value: 0, total: 1 })
@@ -217,7 +217,7 @@ Template.upload.uploadImage = function (file, progressid, cb) {
       $(progressid).hide()
 
       refreshUploadSnapStatus = setInterval(function () {
-        var url = D_UPLDR_HTTP+'://'+D_UPLDR+':'D_UPLDR_PORT'/getProgressByToken/' + result.token
+        var url = D_UPLDR_HTTP+'://'+D_UPLDR+':'+D_UPLDR_PORT+'/getProgressByToken/' + result.token
         $.getJSON(url, function (data) {
           var isCompleteUpload = true
           if (data.ipfsAddSource.progress !== "100.00%") {
