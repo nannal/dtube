@@ -1,12 +1,12 @@
 refreshUploadStatus = null
 
-const D_SNAP = process.env.PORT || "localhost"
-const D_SNAP_PORT = process.env.PORT || 5000
-const D_SNAP_HTTP = process.env.PORT || "http"
+const D_SNAP = process.env.D_SNAP || "localhost"
+const D_SNAP_PORT = process.env.D_SNAP_PORT || 5000
+const D_SNAP_HTTP = process.env.D_SNAP_HTTP || "http"
 
-const D_UPLDR = process.env.PORT || "localhost"
-const D_UPLDR_PORT = process.env.PORT || 5000
-const D_UPLDR_HTTP = process.env.PORT || "http"
+const D_UPLDR = process.env.D_UPLDR|| "localhost"
+const D_UPLDR_PORT = process.env.D_UPLDR_PORT || 5000
+const D_UPLDR_HTTP = process.env.D_UPLDR_HTTP || "http"
 
 Template.upload.rendered = function () {
   Session.set('uploadToken', null)

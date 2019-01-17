@@ -1,6 +1,6 @@
-const D_UPLDR = process.env.PORT || "localhost"
-const D_UPLDR_PORT = process.env.PORT || 5000
-const D_UPLDR_HTTP = process.env.PORT || "http"
+const D_UPLDR = process.env.D_UPLDR || "localhost"
+const D_UPLDR_PORT = process.env.D_UPLDR_PORT || 5000
+const D_UPLDR_HTTP = process.env.D_UPLDR_HTTP || "http"
 
 Template.uploadvideoprogress.helpers({
     progress: function() {
