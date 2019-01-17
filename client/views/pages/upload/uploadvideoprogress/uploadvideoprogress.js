@@ -14,7 +14,7 @@ Template.uploadvideoprogress.rendered = function() {
 Template.uploadvideoprogress.update = function() {
   var token = Session.get('uploadToken')
   var url = D_UPLDR_HTTP+'://'+D_UPLDR+':'+D_UPLDR_PORT+'/getProgressByToken/'+token;
-  var credentials true
+  var credentials = true
   $.ajax({
     cache: false,
     contentType: false,
