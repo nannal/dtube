@@ -1,5 +1,8 @@
-FROM ulexus/meteor
+FROM debian
 
+RUN apt-get update -y
+RUN apt-get install curl
+RUN curl "https://install.meteor.com/" | /bin/sh
 COPY ./ /dtube
 WORKDIR /dtube
 
