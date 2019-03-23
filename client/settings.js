@@ -1,4 +1,7 @@
 // default settings
+
+//Envs Here
+
 Meteor.settings.public = {
   "remote": {
     "dfees": 2500,
