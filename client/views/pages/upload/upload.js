@@ -82,7 +82,7 @@ Template.upload.setBestUploadEndpoint = function (cb) {
 var getUploaderStatus = function (upldr) {
   var url = (Session.get('remoteSettings').localhost == true)
     ? 'http://localhost:5000/getStatus'
-    : 'https://'+upldr+'.d.tube/getStatus'
+    : upldr+'/getStatus'
   return new Promise(function (resolve, reject) {
     var req = new XMLHttpRequest();
     req.open('get', url, true);
@@ -184,7 +184,7 @@ Template.upload.uploadImage = function (file, progressid, cb) {
   $('#uploadSnap > i').css('background', 'transparent')
   var postUrl = (Session.get('remoteSettings').localhost == true)
     ? 'http://localhost:5000/uploadImage'
-    : 'https://snap1.d.tube/uploadImage'
+    : Session.get('remoteSettings').displayNodes[0]+'/uploadImage'
   var formData = new FormData();
   formData.append('files', file);
   $(progressid).progress({ value: 0, total: 1 })
@@ -214,7 +214,7 @@ Template.upload.uploadImage = function (file, progressid, cb) {
       $(progressid).hide()
 
       refreshUploadSnapStatus = setInterval(function () {
-        var url = 'https://snap1.d.tube/getProgressByToken/' + result.token
+        var url = Session.get('remoteSettings').displayNodes[0]+'/getProgressByToken/' + result.token
         $.getJSON(url, function (data) {
           var isCompleteUpload = true
           if (data.ipfsAddSource.progress !== "100.00%") {

@@ -1,17 +1,24 @@
 // default settings
 
 //Envs Here
+ipfshost = process.env.IPFSHOST|| "https://snap1.d.tube"
+snaphost = process.env.SNAPHOST|| "https://snap1.d.tube"
+vidhost = process.env.VIDHOST|| "https://cluster.d.tube"
 
 Meteor.settings.public = {
   "remote": {
     "dfees": 2500,
     "loadLimit": 12,
     "displayNodes": [
-      "https://snap1.d.tube",
-      "http://127.0.0.1:8080"
+      snaphost
     ],
     "snapMaxFileSizeKB": 2048,
-    "upldr": ["cluster"],
+    "ipfs": [
+      ipfshost
+    ],
+    "upldr": [
+      vidhost
+    ],
     "localhost": false
   },
   "app": "dtube/0.8",
@@ -43,11 +50,3 @@ Meteor.settings.public = {
     "tr": {"name": "Türkçe", "path": "tr/tr-TR.json"}
   }
 }
-
-// custom settings loaded from json
-$.get('https://d.tube/DTube_files/settings.json', function(json, result) {
-  if (result == 'success') {
-    Meteor.settings.public = json
-    Session.set('remoteSettings', Meteor.settings.public.remote)
-  }
-})
