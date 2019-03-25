@@ -129,7 +129,7 @@ Template.upload.genBodyLivestream = function (author, permlink, title, snaphash,
 Template.upload.uploadVideo = function (file, progressid, cb) {
   var postUrl = (Session.get('remoteSettings').localhost == true)
     ? 'http://localhost:5000/uploadVideo?videoEncodingFormats=240p,480p,720p,1080p&sprite=true'
-    : 'https://'+Session.get('upldr')+'.d.tube/uploadVideo?videoEncodingFormats=240p,480p,720p,1080p&sprite=true'
+    : Session.get('upldr')+'/uploadVideo?videoEncodingFormats=240p,480p,720p,1080p&sprite=true'
   var formData = new FormData();
   formData.append('files', file);
   $(progressid).progress({ value: 0, total: 1 })
@@ -184,7 +184,7 @@ Template.upload.uploadImage = function (file, progressid, cb) {
   $('#uploadSnap > i').css('background', 'transparent')
   var postUrl = (Session.get('remoteSettings').localhost == true)
     ? 'http://localhost:5000/uploadImage'
-    : Session.get('remoteSettings').displayNodes[0]+'/uploadImage'
+    : Session.get('remoteSettings').snapNodes[0]+'/uploadImage'
   var formData = new FormData();
   formData.append('files', file);
   $(progressid).progress({ value: 0, total: 1 })
@@ -214,7 +214,7 @@ Template.upload.uploadImage = function (file, progressid, cb) {
       $(progressid).hide()
 
       refreshUploadSnapStatus = setInterval(function () {
-        var url = Session.get('remoteSettings').displayNodes[0]+'/getProgressByToken/' + result.token
+        var url = Session.get('remoteSettings').snapNodes[0]+'/getProgressByToken/' + result.token
         $.getJSON(url, function (data) {
           var isCompleteUpload = true
           if (data.ipfsAddSource.progress !== "100.00%") {

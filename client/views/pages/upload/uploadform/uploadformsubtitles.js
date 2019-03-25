@@ -58,7 +58,7 @@ Template.uploadformsubtitles.events({
         reader.readAsText(event.currentTarget.files[0])
     },
     'click #uploadSubtitle': function() {
-        var postUrl = 'https://snap1.d.tube/uploadSubtitle'
+        var postUrl = Session.get('remoteSettings').subsNodes[0]+'/uploadSubtitle'
         var formData = new FormData();
         formData.append('subtitle', $('#subtitleText').val());
         $.ajax({
@@ -83,7 +83,7 @@ Template.uploadformsubtitles.events({
             processData: false,
             success: function (result) {
                 refreshUploadSubtitleStatus = setInterval(function () {
-                    var url = 'https://snap1.d.tube/getProgressByToken/' + result.token
+                    var url = Session.get('remoteSettings').subsNodes[0]+'getProgressByToken/' + result.token
                     $.getJSON(url, function (data) {
                       var isCompleteUpload = true
                       if (data.ipfsAddSource.progress !== "100.00%")
@@ -127,7 +127,7 @@ function removeSubtitle(lang) {
 
     Session.set('tempSubtitles', newSubtitles)
 }
-  
+
 function srt2webvtt(data) {
     // remove dos newlines
     var srt = data.replace(/\r+/g, '');
@@ -147,24 +147,24 @@ function srt2webvtt(data) {
 
     return result;
 }
-  
+
 function convertSrtCue(caption) {
     // remove all html tags for security reasons
-    //caption = caption.replace(/<[a-zA-Z\/][^>]*>/g, ''); 
-    
+    //caption = caption.replace(/<[a-zA-Z\/][^>]*>/g, '');
+
     var cue = "";
     var s = caption.split(/\n/);
     while (s.length > 3) {
       s[2] += '\n' + s.pop();
     }
     var line = 0;
-    
+
     // detect identifier
     if (!s[0].match(/\d+:\d+:\d+/) && s[1].match(/\d+:\d+:\d+/)) {
       cue += s[0].match(/\w+/) + "\n";
       line += 1;
     }
-    
+
     // get time strings
     if (s[line].match(/\d+:\d+:\d+/)) {
       // convert time string
@@ -181,11 +181,11 @@ function convertSrtCue(caption) {
       // file format error or comment lines
       return "";
     }
-    
+
     // get cue text
     if (s[line]) {
       cue += s[line] + "\n\n";
     }
-  
+
     return cue;
 }

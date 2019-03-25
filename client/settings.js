@@ -3,11 +3,18 @@ Meteor.settings.public = {
     "remote": {
       "dfees": 1000,
       "loadLimit": 12,
+      "subsNodes": [
+        "http://localhost:5002"
+      ],
+      "snapNodes": [
+        "http://localhost:5001"
+      ],
       "displayNodes": [
-        "http://snap",
+        "http://localhost:5003",
+          "http://127.0.0.1:8080/"
       ],
       "snapMaxFileSizeKB": 1024,
-      "upldr": ["http://video"]
+      "upldr": ["http://localhost:5000"]
     },
     "app": "dtube/0.8",
     "beneficiary": "dtube",
